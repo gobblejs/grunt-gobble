@@ -1,89 +1,78 @@
 # grunt-gobble
 
-> The last build tool you'll ever need
+The last build tool you'll ever need.
 
 ## Getting Started
-This plugin requires Grunt `~0.4.1`
 
-If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
+First things first: you don't *need* grunt to run Gobble. All you need is [gobble-cli](https://github.com/gobblejs/gobble-cli) and a build definition known as a [gobblefile](https://github.com/gobblejs/gobble/wiki/How-to-write-a-gobblefile).
+
+But if you're already using Grunt and want to integrate Gobble, or you want to manage multiple build definitions, you can do so by installing the plugin:
 
 ```shell
 npm install grunt-gobble --save-dev
 ```
 
-Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+Once the plugin has been installed, add this to your Gruntfile:
 
 ```js
-grunt.loadNpmTasks('grunt-gobble');
+grunt.loadNpmTasks( 'grunt-gobble' );
 ```
+
+*Psst! If you're looking for a more streamlined way to organise Grunt tasks and config, check out http://bit.ly/grunt-happy.*
+
 
 ## The "gobble" task
 
-### Overview
 In your project's Gruntfile, add a section named `gobble` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
   gobble: {
-    options: {
-      // Task-specific options go here.
-    },
     your_target: {
-      // Target-specific file lists and/or options go here.
+      // required for building the project
+      dest: 'tmp/build',
+
+      // optional - which port to use if serving the project. Defaults to 4567
+      port: 5678,
+
+      // optional - typically 'development' or 'production'. Defaults to 'development'.
+      // The environment can be determined inside a build definition with `gobble.env()`
+      environment: 'production',
+
+      // optional - a string (path to build definition, relative to project root) or a
+      // function that returns a gobble node. Defaults to 'gobblefile.js'
+      config: function () {
+        var gobble = require( 'gobble' );
+        return gobble( 'src' ).transform( 'uglify-js' );
+      }
     },
   },
 });
 ```
 
-### Options
 
-#### options.separator
-Type: `String`
-Default value: `',  '`
+## Serving your project
 
-A string value that is used to do something with whatever.
+You can serve your project with the following command:
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
-
-### Usage Examples
-
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
-
-```js
-grunt.initConfig({
-  gobble: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
+```bash
+grunt gobble:your_target:serve
 ```
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+To build the project, omit the `:serve` or replace it with `:build`:
 
-```js
-grunt.initConfig({
-  gobble: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
+```bash
+grunt gobble:your_target
 ```
+
+If you run `grunt gobble` without specifying a target, all targets (if there are more than one) will be built.
+
 
 ## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
-## Release History
-_(Nothing yet)_
+Usual drill - try to adhere to existing conventions, add tests for any new features. Thanks!
+
+
+## License
+
+MIT.
