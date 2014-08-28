@@ -14,11 +14,12 @@ module.exports = function(grunt) {
 
 		var done = this.async(),
 			path = require( 'path' ),
+			env,
 			node,
 			task;
 
-		if ( this.data.environment ) {
-			process.env.GOBBLE_ENV = this.data.environment;
+		if ( env = ( this.data.environment || this.data.env ) ) {
+			process.env.GOBBLE_ENV = env;
 		}
 
 		if ( this.data.config ) {
