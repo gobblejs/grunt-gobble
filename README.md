@@ -1,10 +1,10 @@
 # grunt-gobble
 
-The last build tool you'll ever need.
+[Gobble](https://github.com/gobblejs/gobble) is the last build tool you'll ever need.
 
 ## Getting Started
 
-First things first: you don't *need* grunt to run Gobble. All you need is [gobble-cli](https://github.com/gobblejs/gobble-cli) and a build definition known as a [gobblefile](https://github.com/gobblejs/gobble/wiki/How-to-write-a-gobblefile).
+First things first: you don't *need* Grunt to run Gobble. All you need is [gobble-cli](https://github.com/gobblejs/gobble-cli) and a build definition known as a [gobblefile](https://github.com/gobblejs/gobble/wiki/How-to-write-a-gobblefile).
 
 But if you're already using Grunt and want to integrate Gobble, or you want to manage multiple build definitions, you can do so by installing the plugin:
 
