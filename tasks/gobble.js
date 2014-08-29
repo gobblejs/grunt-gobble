@@ -48,7 +48,8 @@ module.exports = function(grunt) {
 
 			task = node.build({
 				dest: this.data.dest,
-				gobbledir: this.data.gobbledir
+				gobbledir: this.data.gobbledir,
+				force: this.data.force
 			});
 
 			task.then( done );

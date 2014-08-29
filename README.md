@@ -39,6 +39,10 @@ grunt.initConfig({
       // The environment can be determined inside a build definition with `gobble.env()`
       environment: 'production',
 
+      // optional - whether to always empty the contents of `dest`. If `false`, this
+      // task will fail if `dest` is not empty. Defaults to `false`
+      force: true,
+
       // optional - a string (path to build definition, relative to project root) or a
       // function that returns a gobble node. Defaults to 'gobblefile.js'
       config: function () {
