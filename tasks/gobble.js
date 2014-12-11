@@ -6,9 +6,57 @@
  * Licensed under the MIT license.
  */
 
-'use strict';
+var messages = {
+ 	BUILD_INVALIDATED: function ( x ) {
+ 		return f( 'build invalidated (%s). restarting', summariseChanges( x.changes ) );
+ 	},
 
-module.exports = function(grunt) {
+ 	BUILD_START: function () {
+ 		return 'build started';
+ 	},
+
+ 	BUILD_COMPLETE: function ( x ) {
+ 		var result = ( x.dest ? 'built to ' + x.dest : 'build completed' ) + ' in ' + x.duration + 'ms';
+
+ 		if ( x.watch ) {
+ 			result += '. Listening for changes...\n';
+ 		}
+
+ 		return result;
+ 	},
+
+ 	GOBBLEFILE_CHANGED: function () {
+ 		return 'gobblefile changed. restarting server';
+ 	},
+
+ 	MERGE_START: function ( x ) {
+ 		return x.id + ' running...';
+ 	},
+
+ 	MERGE_COMPLETE: function ( x ) {
+ 		return x.id + ' done in ' + x.duration + 'ms';
+ 	},
+
+ 	LIVERELOAD_RUNNING: function () {
+ 		return 'livereload server running';
+ 	},
+
+ 	SERVER_LISTENING: function ( x ) {
+ 		return 'server listening on port ' + x.port;
+ 	},
+
+ 	TRANSFORM_START: function ( x ) {
+ 		return x.id + ' running...';
+ 	},
+
+ 	TRANSFORM_COMPLETE: function ( x ) {
+ 		return x.id + ' done in ' + x.duration + 'ms';
+ 	}
+};
+
+module.exports = function( grunt ) {
+
+	'use strict';
 
 	grunt.registerMultiTask( 'gobble', 'The last build tool you\'ll ever need', function () {
 
@@ -55,7 +103,20 @@ module.exports = function(grunt) {
 			task.then( done );
 		}
 
-		task.on( 'info', grunt.log.ok );
+		task.on( 'info', function ( details ) {
+			var fn, message;
+
+			if ( typeof details === 'string' ) {
+				grunt.log.ok( details );
+			} else {
+				fn = messages[ details.code ];
+
+				if ( fn ) {
+					message = fn( details );
+					grunt.log.ok( message );
+				}
+			}
+		});
 		task.on( 'warning', grunt.log.debug );
 		task.on( 'error', grunt.fatal );
 
